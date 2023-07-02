@@ -1,0 +1,72 @@
+version: "3.9"
+
+services:
+  django:
+    container_name: django
+    build:
+      context: ./
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - pgdb_default
+    networks:
+      - backend
+
+  pgdb_default:
+    image: postgres:latest
+    container_name: pgdb_default
+    environment:
+      POSTGRES_DB: ${PGDB_DEFAULT_DB_NAME}
+      POSTGRES_USER: ${PGDB_DEFAULT_USER_NAME}
+      POSTGRES_PASSWORD: ${PGDB_DEFAULT_PASSWORD}
+#    volumes:
+#      - pgdb_default_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - backend
+
+  pgdb_store:
+    image: postgres:latest
+    container_name: pgdb_store
+    environment:
+      POSTGRES_DB: ${PGDB_STORE_DB_NAME}
+      POSTGRES_USER: ${PGDB_STORE_USER_NAME}
+      POSTGRES_PASSWORD: ${PGDB_STORE_PASSWORD}
+#    volumes:
+#      - pgdb_store_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+    networks:
+      - backend
+
+  pgdb_warehouse:
+    image: postgres:latest
+    container_name: pgdb_warehouse
+    environment:
+      POSTGRES_DB: ${PGDB_WAREHOUSE_DB_NAME}
+      POSTGRES_USER: ${PGDB_WAREHOUSE_USER_NAME}
+      POSTGRES_PASSWORD: ${PGDB_WAREHOUSE_PASSWORD}
+#    volumes:
+#      - pgdb_warehouse_data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    restart: unless-stopped
+    networks:
+      - backend
+
+#volumes:
+#  pgdb_default_data:
+#  pgdb_store_data:
+#  pgdb_warehouse_data:
+
+networks:
+  backend:
+    name: backend
+    driver: bridge
