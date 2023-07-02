@@ -1,11 +1,20 @@
-import requests
+import uuid
 
 from django.db import models
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
+from store.services import create_or_update_warehouse_order, delete_warehouse_order
 
-class StoreOrder(models.Model):
+
+class UUIDMixin(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+
+    class Meta:
+        abstract = True
+
+
+class StoreOrder(UUIDMixin):
     STATUS_CHOICES = (
         ('PENDING', 'Pending'),
         ('SHIPPED', 'Shipped'),
@@ -25,27 +34,10 @@ class StoreOrder(models.Model):
 
 
 @receiver(post_save, sender=StoreOrder)
-def create_or_update_warehouse_order(sender, instance, created, **kwargs):
-    data = {
-        'product_name': instance.product_name,
-        'quantity': instance.quantity,
-        'status': instance.status
-    }
-    try:
-        if created:
-            response = requests.post('http://django:8000/api/v1/warehouse-orders/', data=data)
-            response.raise_for_status()  # Raises a HTTPError if the status is 4xx, 5xx
-        else:
-            response = requests.put(f'http://django:8000/api/v1/warehouse-orders/{instance.id}/', data=data)
-            response.raise_for_status()
-    except requests.exceptions.RequestException as e:
-        print(f'Request failed: {e}')
+def handle_store_order_save(sender, instance, created, **kwargs):
+    create_or_update_warehouse_order(instance, created)
 
 
 @receiver(post_delete, sender=StoreOrder)
-def delete_warehouse_order(sender, instance, **kwargs):
-    try:
-        response = requests.delete(f'http://django:8000/api/v1/warehouse-orders/{instance.id}/')
-        response.raise_for_status()
-    except requests.exceptions.RequestException as e:
-        print(f'Request failed: {e}')
+def handle_store_order_delete(sender, instance, **kwargs):
+    delete_warehouse_order(instance)

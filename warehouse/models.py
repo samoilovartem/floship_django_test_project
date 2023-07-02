@@ -1,7 +1,16 @@
+import uuid
+
 from django.db import models
 
 
-class WarehouseOrder(models.Model):
+class UUIDMixin(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+
+    class Meta:
+        abstract = True
+
+
+class WarehouseOrder(UUIDMixin):
     STATUS_CHOICES = (
         ('PENDING', 'Pending'),
         ('SHIPPED', 'Shipped'),

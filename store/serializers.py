@@ -5,4 +5,4 @@ from .models import StoreOrder
 class StoreOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = StoreOrder
-        fields = ('product_name', 'quantity', 'status')
+        fields = ('id', 'product_name', 'quantity', 'status')
