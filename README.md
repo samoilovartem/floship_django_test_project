@@ -44,3 +44,12 @@ To start the project, simply run the following command in the terminal:
 ```shell
 docker-compose up --build
 ```
+Note: no need to apply migrations manually, `entrypoint.sh` will do the job.
+
+### Create superuser
+
+You need to create a superuser to access admin dashboard and test sync functionality. Just run the following commands and follow instructions from Django:
+```shell
+docker exec -it django sh
+python manage.py createsuperuser
+```
