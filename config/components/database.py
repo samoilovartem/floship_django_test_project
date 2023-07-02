@@ -24,7 +24,7 @@ DATABASES = {
         'PASSWORD': os.environ.get('PGDB_WAREHOUSE_PASSWORD'),
         'HOST': os.environ.get('PGDB_WAREHOUSE_HOST_NAME'),
         'PORT': os.environ.get('PGDB_WAREHOUSE_PORT'),
-    }
+    },
 }
 
 DATABASE_ROUTERS = [

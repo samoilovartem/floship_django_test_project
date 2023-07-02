@@ -23,8 +23,8 @@ services:
       POSTGRES_DB: ${PGDB_DEFAULT_DB_NAME}
       POSTGRES_USER: ${PGDB_DEFAULT_USER_NAME}
       POSTGRES_PASSWORD: ${PGDB_DEFAULT_PASSWORD}
-#    volumes:
-#      - pgdb_default_data:/var/lib/postgresql/data
+    volumes:
+      - pgdb_default_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     restart: unless-stopped
@@ -38,8 +38,8 @@ services:
       POSTGRES_DB: ${PGDB_STORE_DB_NAME}
       POSTGRES_USER: ${PGDB_STORE_USER_NAME}
       POSTGRES_PASSWORD: ${PGDB_STORE_PASSWORD}
-#    volumes:
-#      - pgdb_store_data:/var/lib/postgresql/data
+    volumes:
+      - pgdb_store_data:/var/lib/postgresql/data
     ports:
       - "5433:5432"
     restart: unless-stopped
@@ -53,18 +53,18 @@ services:
       POSTGRES_DB: ${PGDB_WAREHOUSE_DB_NAME}
       POSTGRES_USER: ${PGDB_WAREHOUSE_USER_NAME}
       POSTGRES_PASSWORD: ${PGDB_WAREHOUSE_PASSWORD}
-#    volumes:
-#      - pgdb_warehouse_data:/var/lib/postgresql/data
+    volumes:
+      - pgdb_warehouse_data:/var/lib/postgresql/data
     ports:
       - "5434:5432"
     restart: unless-stopped
     networks:
       - backend
 
-#volumes:
-#  pgdb_default_data:
-#  pgdb_store_data:
-#  pgdb_warehouse_data:
+volumes:
+  pgdb_default_data:
+  pgdb_store_data:
+  pgdb_warehouse_data:
 
 networks:
   backend:

@@ -1,10 +1,10 @@
 import uuid
 
 from django.db import models
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from store.services import create_or_update_warehouse_order, delete_warehouse_order
+from store.services import create_or_update_warehouse_order
 
 
 class UUIDMixin(models.Model):
@@ -24,6 +24,7 @@ class StoreOrder(UUIDMixin):
     product_name = models.CharField(max_length=255)
     quantity = models.IntegerField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+    sync = models.BooleanField(default=True)
 
     def __str__(self):
         return self.product_name
@@ -35,9 +36,5 @@ class StoreOrder(UUIDMixin):
 
 @receiver(post_save, sender=StoreOrder)
 def handle_store_order_save(sender, instance, created, **kwargs):
-    create_or_update_warehouse_order(instance, created)
-
-
-@receiver(post_delete, sender=StoreOrder)
-def handle_store_order_delete(sender, instance, **kwargs):
-    delete_warehouse_order(instance)
+    if instance.sync:
+        create_or_update_warehouse_order(instance, created)

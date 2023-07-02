@@ -16,6 +16,59 @@ psycopg2-binary = "^2.9.6"
 requests = "^2.31.0"
 loguru = "^0.7.0"
 
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.3.3"
+isort = "^5.12.0"
+black = "^23.3.0"
+
+[tool.black]
+exclude = '''
+    /(
+        \.git
+        | \._build
+        | \.back.out
+        | \.build
+        | \.coverage
+        | \.dist
+        | \.hg
+        | \.mypy_cache
+        | \.tox
+        | \.venv
+        | ./src/coverage
+        | blib2to3
+        | tests/data
+    )/
+'''
+include = '\.pyi?$'
+line-length = 110
+skip-string-normalization = true
+
+[tool.isort]
+combine_as_imports = true
+ensure_newline_before_comments = true
+force_alphabetical_sort_within_sections = true
+force_grid_wrap = 0
+include_trailing_comma = true
+line_length = 110
+lines_between_sections = 1
+multi_line_output = 3
+profile = "black"
+skip = [
+    ".coverage",
+    "coverage/*",
+    "cov.html",
+    ".dockerignore",
+    ".env",
+    ".github",
+    ".gitignore",
+    ".html",
+    ".md",
+    ".python-version",
+    ".rst",
+    ".xml"
+]
+skip_gitignore = true
+use_parentheses = true
 
 [build-system]
 requires = ["poetry-core"]

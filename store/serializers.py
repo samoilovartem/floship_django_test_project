@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from .models import StoreOrder
+
+from store.models import StoreOrder
 
 
 class StoreOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = StoreOrder
-        fields = ('id', 'product_name', 'quantity', 'status')
+        fields = ('id', 'product_name', 'quantity', 'status', 'sync')
